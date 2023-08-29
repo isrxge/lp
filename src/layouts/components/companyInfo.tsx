@@ -107,7 +107,9 @@ export default function CompanyInfo() {
         <div className="min-h-[500px] grid grid-cols-3 h-full relative">
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
             <Image
-              src={"https://res.cloudinary.com/derjssgq9/image/upload/v1692668701/LPC_Images/About/wm_1_jcg1xz.png"}
+              src={
+                "https://res.cloudinary.com/derjssgq9/image/upload/v1692668701/LPC_Images/About/wm_1_jcg1xz.png"
+              }
               height={400}
               width={400}
               alt="wm"
@@ -126,7 +128,7 @@ export default function CompanyInfo() {
             </h2>
           </div>
           <div className="min-h-[50px] col-span-1 flex flex-col items-center justify-center">
-            <h2 className="mb-1">700+</h2>
+            <h2 className="mb-1">1000+</h2>
             <h6>
               {curlanguage.changeLanguage.value == "en"
                 ? DataEn["projects"].name
@@ -134,7 +136,7 @@ export default function CompanyInfo() {
             </h6>
           </div>
           <div className="min-h-[50px] col-span-1 flex flex-col items-center justify-center">
-            <h2 className="mb-1">&gt;30</h2>
+            <h2 className="mb-1">&gt;100</h2>
             <h6>
               {curlanguage.changeLanguage.value == "en"
                 ? DataEn["partner"].name
@@ -142,7 +144,7 @@ export default function CompanyInfo() {
             </h6>
           </div>
           <div className="min-h-[50px] col-span-1 flex flex-col items-center justify-center">
-            <h2 className="mb-1">36</h2>
+            <h2 className="mb-1">500</h2>
             <h6>
               {curlanguage.changeLanguage.value == "en"
                 ? DataEn["customer2"].name
@@ -152,11 +154,15 @@ export default function CompanyInfo() {
         </div>
         <div className="py-24 sm:py-32">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <h3 className="text-center">
-              {curlanguage.changeLanguage.value == "en"
-                ? DataEn["partner"].description.toUpperCase()
-                : Data["partner"].description.toUpperCase()}
-            </h3>
+            <h3
+              className="text-center"
+              dangerouslySetInnerHTML={{
+                __html:
+                  curlanguage.changeLanguage.value == "en"
+                    ? DataEn["partner"].description.toUpperCase()
+                    : Data["partner"].description.toUpperCase(),
+              }}
+            ></h3>
             <PartnerListForAbout />
           </div>
         </div>
@@ -173,6 +179,16 @@ export default function CompanyInfo() {
             ></h3>
             <CustomerListForAbout />
           </div>
+        </div>
+
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <Image
+            src="https://res.cloudinary.com/derjssgq9/image/upload/v1693284851/lpc_revenue_lcetzq.webp"
+            width={1200}
+            height={700}
+            alt="LPC team"
+            objectFit="cover"
+          />
         </div>
       </div>
     </section>

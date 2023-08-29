@@ -24,11 +24,13 @@ export default function CustomerList() {
           const customerCheck = await loadCustomer();
 
           dispatch(customerData(customerCheck));
+
           setCustomers(customerCheck.customer);
         } else {
           customerList = JSON.parse(
             localStorage.getItem("customerList") || "[]",
           );
+
           setCustomers(customerList);
         }
       } else {
