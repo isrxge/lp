@@ -7,7 +7,7 @@ import PostSidebar from "@/partials/PostSidebar";
 
 import { useDispatch, useSelector } from "react-redux";
 import { companyNew, news } from "@/feature/data/newSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { loadNews } from "@/lib/loadData";
 import dynamic from "next/dynamic";
 import { useUrl } from "nextjs-current-url";
@@ -20,10 +20,11 @@ const Posts = () => {
   const curlanguage = useSelector((rootState) => language(rootState));
   const newInfo = useSelector((rootState) => news(rootState));
 
-  const newList =
+  const [newList, setNewList] = useState(
     newInfo.newData.value.companyNews == undefined
       ? newInfo.newData.value.companyNews
-      : [];
+      : [],
+  );
   const dispatch = useDispatch();
   useEffect(() => {
     // declare the data fetching function
@@ -37,14 +38,13 @@ const Posts = () => {
             titleEn: 1,
             image: 1,
             categories: 1,
-            description: 1,
-            meta_title: 1,
             content: 1,
             contentEn: 1,
             date: 1,
           },
           href,
         );
+        setNewList(newsCheck.news);
         dispatch(companyNew(newsCheck));
       } else {
       }
@@ -53,11 +53,11 @@ const Posts = () => {
     fetchNew()
       // make sure to catch any error
       .catch(console.error);
-  }, []);
+  }, [newList]);
 
   const posts: any[] = newInfo.newData.value.companyNews;
   const metadata = {
-    title: "Sp1",
+    title: "Tin tức",
     meta_title: "",
     description: "this is meta description",
     image: "",
@@ -66,7 +66,9 @@ const Posts = () => {
 
   const totalPages = Math.ceil(posts.length / 2);
 
-  return (
+  return newList.length == 0 ? (
+    <></>
+  ) : (
     <>
       <SeoMeta
         title={metadata.title}
@@ -92,11 +94,15 @@ const Posts = () => {
                   </div>
                 ))}
               </div>
-              <Pagination
-                section={"blog"}
-                currentPage={1}
-                totalPages={totalPages}
-              />
+              {posts.length > 9 ? (
+                <Pagination
+                  section={"blog"}
+                  currentPage={1}
+                  totalPages={totalPages}
+                />
+              ) : (
+                <></>
+              )}
             </div>
 
             <PostSidebar categories={categories} allCategories={posts} />
