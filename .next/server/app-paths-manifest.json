@@ -1,8 +1,0 @@
-{
-  "/page": "app/page.js",
-  "/contact/page": "app/contact/page.js",
-  "/blog/page": "app/blog/page.js",
-  "/Solution/page": "app/Solution/page.js",
-  "/Solution/[id]/[idcontent]/page": "app/Solution/[id]/[idcontent]/page.js",
-  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js"
-}

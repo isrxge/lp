@@ -1,5 +1,5 @@
 import connectDB from "@/lib/mongodb";
-import New from "@/models/new";
+import Product from "@/models/product";
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
 export async function POST(req) {
@@ -8,46 +8,50 @@ export async function POST(req) {
 
     titleEn,
 
-    meta_title,
+    type,
 
-    description,
+    description1,
 
-    date,
-    categories,
-    tags,
+    description2,
+
+    descriptionEn1,
+
+    descriptionEn2,
+
     image,
 
-    draft,
+    pros,
+
+    prosEn,
 
     content,
-
-    contentEn,
   } = await req.json();
 
   try {
     await connectDB();
 
-    await New.create({
+    await Product.create({
       title,
 
       titleEn,
 
-      meta_title,
+      type,
 
-      description,
+      description1,
 
-      date,
+      description2,
+
+      descriptionEn1,
+
+      descriptionEn2,
 
       image,
 
-      categories,
-      tags,
+      pros,
 
-      draft,
+      prosEn,
 
       content,
-
-      contentEn,
     });
 
     return NextResponse.json({
@@ -67,7 +71,6 @@ export async function POST(req) {
     }
   }
 }
-
 export async function PUT(req) {
   const {
     _id,
@@ -75,46 +78,51 @@ export async function PUT(req) {
 
     titleEn,
 
-    meta_title,
+    type,
 
-    description,
+    description1,
 
-    date,
-    categories,
-    tags,
+    description2,
+
+    descriptionEn1,
+
+    descriptionEn2,
+
     image,
 
-    draft,
+    pros,
+
+    prosEn,
 
     content,
-
-    contentEn,
   } = await req.json();
 
   try {
     await connectDB();
-
-    await New.findOneAndUpdate(
+    await Product.findOneAndUpdate(
       { _id: _id },
       {
         title,
 
         titleEn,
 
-        meta_title,
+        type,
 
-        description,
+        description1,
 
-        date,
-        categories,
-        tags,
+        description2,
+
+        descriptionEn1,
+
+        descriptionEn2,
+
         image,
 
-        draft,
+        pros,
+
+        prosEn,
 
         content,
-
-        contentEn,
       },
       { new: true },
     );
@@ -132,22 +140,22 @@ export async function PUT(req) {
       // console.log(errorList);
       return NextResponse.json({ msg: errorList });
     } else {
-      return NextResponse.json({ msg: ["Unable to send message."] });
+      return NextResponse.json({ msg: error });
     }
   }
 }
 export async function GET() {
   try {
     await connectDB();
-    let news = await New.find({});
-
-    return NextResponse.json({ news });
+    const products = await Product.find({});
+    return NextResponse.json({ products });
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
       let errorList = [];
       for (let e in error.errors) {
         errorList.push(error.errors[e].message);
       }
+      console.log(errorList);
       return NextResponse.json({ msg: errorList });
     } else {
       return NextResponse.json({ msg: ["Unable to send message."] });

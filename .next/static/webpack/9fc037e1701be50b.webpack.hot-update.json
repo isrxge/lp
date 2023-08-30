@@ -1,1 +1,0 @@
-{"c":["app/page","app/layout","app/about/page","app/blog/page","app/contact/page","app/Service/[id]/page","app/Solution/[id]/page","app/Solution/[id]/[idcontent]/page","app/categories/[single]/page","app/Solution/page","app/Service/page","webpack"],"r":[],"m":["(app-pages-browser)/./src/layouts/components/Breadcrumbs.tsx"]}
