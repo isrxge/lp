@@ -1,5 +1,5 @@
 "use client";
-import SeoMeta from "@/partials/SeoMeta";
+const SeoMeta = dynamic(() => import("@/partials/SeoMeta"));
 import Data from "@/config/data.json";
 import DataEn from "@/config/dataEn.json";
 import Banner from "../layouts/components/banner";
@@ -11,26 +11,17 @@ import "../styles/homepage.scss";
 import ProductList from "@/components/productList";
 import PartnerList from "@/components/partnerList";
 import CustomerList from "@/components/customerList";
-import { useEffect } from "react";
+import dynamic from "next/dynamic";
 
 const Home = () => {
   const curlanguage = useSelector((rootState) => language(rootState));
-  // window.onbeforeunload = function() {
-  //   localStorage.clear
-  //   return '';
-  // };
-  useEffect(() => {
-    // declare the data fetching function
-    // window.onbeforeunload = function () {
-    //   localStorage.clear();
-    //   return "";
-    // };
-  }, []);
+
   return (
     <div className="container-snap">
       <SeoMeta />
+
       <div
-        className={`flex flex-col justify-between`}
+        // className={`flex flex-col justify-between`}
         style={{ height: "90vh" }}
       >
         <Banner />
