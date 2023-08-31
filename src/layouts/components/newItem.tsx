@@ -9,13 +9,15 @@ import { language } from "@/feature/changeLanguage/changeLanguageSlice";
 import Data from "@/config/data.json";
 
 import DataEn from "@/config/dataEn.json";
+
 import Image from "next/image";
+
 export default function NewItem({ src, title, id, i }: any) {
   const curlanguage = useSelector((rootState) => language(rootState));
 
   return (
     <div className="py-4 parent-newitem">
-      <div className="shadow-lg group container  rounded-md bg-gray-50 justify-center items-center max-w-sm flex  mx-auto content-div">
+      <div className=" shadow-lg group container rounded-md bg-gray-50 justify-center items-center max-w-sm flex  mx-auto content-div">
         <div className="h-5/5">
           <div className="relative max-w-xs overflow-hidden bg-cover bg-no-repeat h-3/5 w-full">
             <Image
@@ -29,8 +31,8 @@ export default function NewItem({ src, title, id, i }: any) {
             />
           </div>
 
-          <div className="py-8 px-4 bg-gray-50  rounded-b-md fd-cl group-hover:opacity-25 new-title">
-            <span className="block text-lg text-gray-800 font-bold tracking-wide">
+          <div className="py-8 px-4 bg-gray-50 w-60 h-32  rounded-b-md fd-cl group-hover:opacity-25 new-title">
+            <span className="overflow-hidden block text-lg text-gray-800 font-bold tracking-wide">
               {title}
             </span>
           </div>
