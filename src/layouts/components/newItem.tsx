@@ -9,9 +9,7 @@ import { language } from "@/feature/changeLanguage/changeLanguageSlice";
 import Data from "@/config/data.json";
 
 import DataEn from "@/config/dataEn.json";
-
 import Image from "next/image";
-
 export default function NewItem({ src, title, id, i }: any) {
   const curlanguage = useSelector((rootState) => language(rootState));
 
