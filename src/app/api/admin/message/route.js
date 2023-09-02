@@ -1,22 +1,12 @@
 import connectDB from "@/lib/mongodb";
-import Company from "@/models/company";
+import Message from "@/models/message";
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
 export async function GET() {
   try {
     await connectDB();
-    const company = await Company.find(
-      {},
-      {
-        companyName: 1,
-        companyDescription: 1,
-        companyDescriptionEn: 1,
-        companyCore: 1,
-        companyCoreEn: 1,
-        companyImage: 1,
-      },
-    );
-    return NextResponse.json({ company });
+    const messages = await Message.find({});
+    return NextResponse.json({ messages });
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
       let errorList = [];

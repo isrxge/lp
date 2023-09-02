@@ -11,7 +11,7 @@ import { companyProduct, product } from "@/feature/data/productSlice";
 import PageHeader from "@/partials/PageHeader";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { loadProduct } from "@/lib/loadData";
+import { loadProduct, loadSolution } from "@/lib/loadData";
 import { useUrl } from "nextjs-current-url";
 import dynamic from "next/dynamic";
 
@@ -33,6 +33,23 @@ const Solutions = () => {
     // declare the data fetching function
     const fetchSolution = async () => {
       if (data.length == 0) {
+        const solutionCheck = await loadSolution(
+          {
+            title: 1,
+            _id: 1,
+
+            titleEn: 1,
+            image: 1,
+
+            pros: 1,
+            prosEn: 1,
+
+            description2: 1,
+            descriptionEn2: 1,
+          },
+          href,
+        );
+        setData(solutionCheck.products);
         const productCheck = await loadProduct(
           {
             title: 1,
@@ -50,11 +67,7 @@ const Solutions = () => {
           },
           href,
         );
-        setData(
-          productCheck.products.filter(
-            (item: { type: string }) => item.type == "Solution",
-          ),
-        );
+
         dispatch(companyProduct(productCheck));
       } else {
       }

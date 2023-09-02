@@ -1,21 +1,33 @@
 import connectDB from "@/lib/mongodb";
-import User from "@/models/user";
+import Banner from "@/models/banner";
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
 export async function POST(req) {
   const {
-    email,
+    title,
 
-    password,
+    titleEn,
+
+    content,
+
+    contentEn,
+
+    image,
   } = await req.json();
 
   try {
     await connectDB();
 
-    await User.create({
-      email,
+    await Banner.create({
+      title,
 
-      password,
+      titleEn,
+
+      content,
+
+      contentEn,
+
+      image,
     });
 
     return NextResponse.json({
@@ -35,21 +47,54 @@ export async function POST(req) {
     }
   }
 }
-export async function GET() {
+export async function PUT(req) {
+  const {
+    _id,
+    title,
+
+    titleEn,
+
+    content,
+
+    contentEn,
+
+    image,
+  } = await req.json();
+
   try {
     await connectDB();
-    const user = await User.find({});
-    return NextResponse.json({ user });
+
+    await Banner.findOneAndUpdate(
+      { _id: _id },
+      {
+        title,
+
+        titleEn,
+
+        content,
+
+        contentEn,
+
+        image,
+      },
+      { new: true },
+    );
+
+    return NextResponse.json({
+      msg: ["Message sent successfully"],
+      success: true,
+    });
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
       let errorList = [];
       for (let e in error.errors) {
         errorList.push(error.errors[e].message);
       }
-      console.log(errorList);
+      // console.log(errorList);
       return NextResponse.json({ msg: errorList });
     } else {
       return NextResponse.json({ msg: ["Unable to send message."] });
     }
   }
 }
+

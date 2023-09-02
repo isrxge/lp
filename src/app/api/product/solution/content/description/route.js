@@ -1,22 +1,18 @@
 import connectDB from "@/lib/mongodb";
-import Company from "@/models/company";
+import Product from "@/models/product";
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
-export async function GET() {
+
+export async function POST(req, res) {
+  const { _id, searchField, contentId } = await req.json();
   try {
     await connectDB();
-    const company = await Company.find(
-      {},
-      {
-        companyName: 1,
-        companyDescription: 1,
-        companyDescriptionEn: 1,
-        companyCore: 1,
-        companyCoreEn: 1,
-        companyImage: 1,
-      },
+    const products = await Product.findOne(
+      { _id: _id },
+      { content: { $elemMatch: { _id: contentId } } },
+      searchField,
     );
-    return NextResponse.json({ company });
+    return NextResponse.json({ products });
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {
       let errorList = [];
