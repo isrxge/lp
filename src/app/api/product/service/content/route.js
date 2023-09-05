@@ -2,14 +2,15 @@ import connectDB from "@/lib/mongodb";
 import Product from "@/models/product";
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
-
+import decryptId from "../../../../../lib/utils/decrypt";
 export async function POST(req, res) {
   const { _id, searchField } = await req.json();
+  const decrypted = decryptId(_id);
   try {
     await connectDB();
     const products = await Product.findOne(
       {},
-      { content: { $elemMatch: { _id: _id } } },
+      { content: { $elemMatch: { _id: decrypted } } },
       searchField,
     );
     return NextResponse.json({ products });

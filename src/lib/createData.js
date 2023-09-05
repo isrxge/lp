@@ -1,4 +1,6 @@
-export async function createNews(newInfo) {
+import { useSession } from "next-auth/react";
+
+export async function createNews(newInfo, session) {
   // Call an external API endpoint to get posts.
   // You can use any data fetching library
   // const posts = await loadNews()
@@ -22,6 +24,7 @@ export async function createNews(newInfo) {
     content: newInfo.content,
 
     contentEn: newInfo.contentEn,
+    session: session,
   };
   const res = await fetch("api/admin/new", {
     method: "post",
@@ -32,45 +35,43 @@ export async function createNews(newInfo) {
   // By returning { props: { posts } }, the Blog component
   // will receive `posts` as a prop at build time
 }
-export async function addUsers(user) {
+export async function addUsers(user, session) {
   // Call an external API endpoint to get posts.
   // You can use any data fetching library
   // const posts = await loadNews()
-  const res = await fetch("api/admin/user");
-  const users = await res.json();
-  // By returning { props: { posts } }, the Blog component
-  // will receive `posts` as a prop at build time
-  return users;
-}
-export async function addCompanyInfo(company) {
-  // Call an external API endpoint to get posts.
-  // You can use any data fetching library
-  // const posts = await loadNews()
-  const res = await fetch("api/admin/company");
-  const info = await res.json();
-  // By returning { props: { posts } }, the Blog component
-  // will receive `posts` as a prop at build time
-  return info;
-}
-export async function addCustomer(customer) {
-  // Call an external API endpoint to get posts.
-  // You can use any data fetching library
-  // const posts = await loadNews()
-  customer["type"] = "Customer";
-  const res = await fetch("api/admin/customer", {
+  user["session"] = session;
+  const res = await fetch("api/admin/user", {
     method: "post",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(customer),
+    body: JSON.stringify(user),
   });
 
   // By returning { props: { posts } }, the Blog component
   // will receive `posts` as a prop at build time
 }
-export async function addPartner(partner) {
+
+export async function addCustomer(customer, session) {
+  // Call an external API endpoint to get posts.
+  // You can use any data fetching library
+  // const posts = await loadNews()
+  customer["type"] = "Customer";
+  customer["session"] = session;
+  const res = await fetch("api/admin/customer", {
+    method: "post",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(customer),
+    session: session,
+  });
+
+  // By returning { props: { posts } }, the Blog component
+  // will receive `posts` as a prop at build time
+}
+export async function addPartner(partner, session) {
   // Call an external API endpoint to get posts.
   // You can use any data fetching library
   // const posts = await loadNews()
   partner["type"] = "Partner";
+  partner["session"] = session;
   const res = await fetch("api/admin/partner", {
     method: "post",
     headers: { "Content-Type": "application/json" },
@@ -80,7 +81,7 @@ export async function addPartner(partner) {
   // By returning { props: { posts } }, the Blog component
   // will receive `posts` as a prop at build time
 }
-export async function addProduct(product) {
+export async function addProduct(product, session) {
   // Call an external API endpoint to get posts.
   // You can use any data fetching library
   // const posts = await loadNews()
@@ -106,6 +107,7 @@ export async function addProduct(product) {
     prosEn: product.prosEn.split(/\s*,\s*/),
 
     content: product.content,
+    session: session,
   };
 
   const res = await fetch("api/admin/product", {
@@ -117,7 +119,7 @@ export async function addProduct(product) {
   // By returning { props: { posts } }, the Blog component
   // will receive `posts` as a prop at build time
 }
-export async function addBanner(banner) {
+export async function addBanner(banner, session) {
   // Call an external API endpoint to get posts.
 
   // You can use any data fetching library
@@ -134,6 +136,7 @@ export async function addBanner(banner) {
     contentEn: banner.contentEn,
 
     image: banner.image,
+    session: session,
   };
 
   const res = await fetch("api/admin/banner", {
@@ -141,7 +144,7 @@ export async function addBanner(banner) {
 
     headers: { "Content-Type": "application/json" },
 
-    body: JSON.stringify(banner),
+    body: JSON.stringify(data),
   });
 
   // By returning { props: { posts } }, the Blog component

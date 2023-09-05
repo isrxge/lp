@@ -12,6 +12,8 @@ import { loadProduct, loadSolutionContent } from "@/lib/loadData";
 import PageHeader from "@/partials/PageHeader";
 import { useUrl } from "nextjs-current-url";
 import dynamic from "next/dynamic";
+import encryptId from "../../../lib/utils/encrypt";
+
 const RegularPages = () => {
   const params: any = useParams();
   // const productInfo = useSelector((rootState) => product(rootState));
@@ -23,9 +25,10 @@ const RegularPages = () => {
   //     : [];
   const { href } = useUrl() ?? {};
   let [data, setData]: any = useState({});
-
+  let keyUtf8 = "UTF-8";
   // const dispatch = useDispatch();
   // const router = useRouter();
+  
   useEffect(() => {
     // declare the data fetching function
     const fetchSolution = async () => {
@@ -162,7 +165,7 @@ const RegularPages = () => {
                 ) => {
                   return (
                     <ProductCard
-                      key={content.id}
+                      key={content._id}
                       srcImg={content.imgSrc}
                       title={
                         curlanguage.changeLanguage.value == "en"
@@ -175,7 +178,9 @@ const RegularPages = () => {
                           : content.content
                       }
                       id={content.id}
-                      link={`${data?._id}/${content._id}`}
+                      link={`${encryptId(data?._id).toString()}/${encryptId(
+                        content._id
+                      ).toString()}`}
                     ></ProductCard>
                   );
                 },

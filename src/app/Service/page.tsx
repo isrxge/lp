@@ -11,11 +11,12 @@ import { loadProduct, loadService } from "@/lib/loadData";
 import { useEffect, useState } from "react";
 import { useUrl } from "nextjs-current-url";
 import dynamic from "next/dynamic";
+import encryptId from "../../lib/utils/encrypt";
 const RegularPages = () => {
   const { href } = useUrl() ?? {};
 
   let [data, setData]: any = useState({});
-
+  let keyUtf8 = "";
   useEffect(() => {
     // declare the data fetching function
     const fetchSolution = async () => {
@@ -157,7 +158,7 @@ const RegularPages = () => {
                           : content.content
                       }
                       id={content.id}
-                      link={`Service/${content._id}`}
+                      link={`Service/${encryptId(content._id).toString()}`}
                     ></ProductCard>
                   );
                 },
