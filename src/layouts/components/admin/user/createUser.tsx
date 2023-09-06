@@ -5,27 +5,31 @@ import React, { useState } from "react";
 import { useForm } from "@mantine/form";
 
 import { TextInput, Button, Box, Code, Grid, Col } from "@mantine/core";
-import Image from "next/image";
-import { updateCustomer } from "@/lib/updateData";
+
+import { addCustomer } from "@/lib/createData";
 import { useSession } from "next-auth/react";
 
-function UpdateCustomer({ Customer, handleSaveClick }) {
-  const [selectedImage, setSelectedImage] = useState(Customer.src);
+function CustomerForm() {
+  const [selectedImage, setSelectedImage] = useState(null);
   let { data: session, status } = useSession();
   const [successMessage, setSuccessMessage] = useState<string | null>(null); // Updated type declaration
 
   const form = useForm({
-    initialValues: Customer,
+    initialValues: {
+      name: "",
+
+      src: "",
+    },
   });
 
   const onImageChange = (e) => {
     const file = e.target.files[0];
 
-    setSelectedImage(URL.createObjectURL(file));
+    setSelectedImage(file);
   };
 
   const onSubmitForm = async (values) => {
-    if (selectedImage && selectedImage != Customer.src) {
+    if (selectedImage) {
       const formData = new FormData();
 
       formData.append("file", selectedImage);
@@ -53,12 +57,12 @@ function UpdateCustomer({ Customer, handleSaveClick }) {
 
     // Continue with the rest of the form submission
 
-    updateCustomer(values, session);
+    addCustomer(values, session);
 
     form.reset();
 
     setSuccessMessage("Data added successfully!");
-    handleSaveClick();
+
     setTimeout(() => {
       setSuccessMessage(null);
     }, 5000);
@@ -70,7 +74,7 @@ function UpdateCustomer({ Customer, handleSaveClick }) {
     <div className="container">
       <Box maw={"75%"} mx="auto">
         <form onSubmit={form.onSubmit((values) => onSubmitForm(values))}>
-          <h3 className="flex justify-center">Update customers</h3>
+          <h3 className="flex justify-center">Add new customers</h3>
 
           <Grid gutter="lg">
             <Col span={12}>
@@ -83,12 +87,6 @@ function UpdateCustomer({ Customer, handleSaveClick }) {
 
             <Col span={6}>
               <input type="file" accept="image/*" onChange={onImageChange} />
-              <Image
-                src={selectedImage}
-                alt="Selected Image"
-                width={150}
-                height={150}
-              />
             </Col>
 
             <Col span={6} className="flex justify-end mt-6">
@@ -117,4 +115,4 @@ function UpdateCustomer({ Customer, handleSaveClick }) {
   );
 }
 
-export default UpdateCustomer;
+export default CustomerForm;

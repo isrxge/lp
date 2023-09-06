@@ -2,6 +2,7 @@ import connectDB from "@/lib/mongodb";
 import Partner from "@/models/partner";
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
+import { getServerSession } from "next-auth";
 export async function POST(req) {
   const {
     src,
@@ -9,11 +10,10 @@ export async function POST(req) {
     type,
 
     name,
-    session,
   } = await req.json();
-
+  const session = await getServerSession({ req });
   try {
-    if (session != undefined) {
+    if (session) {
       await connectDB();
 
       await Partner.create({
@@ -50,11 +50,11 @@ export async function PUT(req) {
     type,
 
     name,
-    session,
+    
   } = await req.json();
-
+  const session = await getServerSession({ req });
   try {
-    if (session != undefined) {
+    if (session) {
       await connectDB();
 
       await Partner.findOneAndUpdate(

@@ -2,15 +2,21 @@ import connectDB from "@/lib/mongodb";
 import Message from "@/models/message";
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
+import { getServerSession } from "next-auth";
 export async function POST(req, res) {
-  const { session } = await req.json();
+  const session = await getServerSession({ req });
   try {
-    if (session != undefined) {
+    if (session) {
       await connectDB();
-      const messages = await Message.find({});
+      const messages = await Message.find(
+        {},
+        { name: 1, email: 1, message: 1 },
+      );
       return NextResponse.json({ messages });
-    }else{
-      return NextResponse.json({ msg: ["You are not allowed to perform this action."]})
+    } else {
+      return NextResponse.json({
+        msg: ["You are not allowed to perform this action."],
+      });
     }
   } catch (error) {
     if (error instanceof mongoose.Error.ValidationError) {

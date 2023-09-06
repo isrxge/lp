@@ -2,6 +2,7 @@ import connectDB from "@/lib/mongodb";
 import Banner from "@/models/banner";
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
+import { getServerSession } from "next-auth";
 export async function POST(req) {
   const {
     title,
@@ -13,11 +14,10 @@ export async function POST(req) {
     contentEn,
 
     image,
-    session,
   } = await req.json();
-
+  const session = await getServerSession({ req });
   try {
-    if (session != undefined) {
+    if (session) {
       await connectDB();
 
       await Banner.create({
@@ -62,11 +62,10 @@ export async function PUT(req) {
     contentEn,
 
     image,
-    session,
   } = await req.json();
-
+  const session = await getServerSession({ req });
   try {
-    if (session != undefined) {
+    if (session) {
       await connectDB();
 
       await Banner.findOneAndUpdate(

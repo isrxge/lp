@@ -13,20 +13,18 @@ import { randomId } from "@mantine/hooks";
 import { TextInput, Button, Box, Code, Grid, Col } from "@mantine/core";
 import { useSession } from "next-auth/react";
 
-const UpdateBanner = ({ banner }) => {
+const UpdateBanner = ({ banner, handleSaveClick }) => {
   const [selectedImage, setSelectedImage] = useState(banner.image);
   let { data: session, status }: any = useSession();
-  const [imagePreview, setImagePreview] = useState("");
+  const [imagePreview, setImagePreview] = useState(banner.image);
 
   const [successMessage, setSuccessMessage] = useState<string | null>(null); // Updated type declaration
 
   const onImageChange = (e) => {
     const file = e.target.files[0];
 
-    setSelectedImage(file);
-
     const imageUrl = URL.createObjectURL(file);
-
+    setSelectedImage(imageUrl);
     setImagePreview(imageUrl);
   };
 
@@ -35,7 +33,7 @@ const UpdateBanner = ({ banner }) => {
   });
 
   const onSubmitForm = async (values) => {
-    if (selectedImage) {
+    if (selectedImage && selectedImage != banner.image) {
       // Nếu có hình ảnh được chọn, tải lên trước
 
       const formData = new FormData();
@@ -69,8 +67,8 @@ const UpdateBanner = ({ banner }) => {
 
     form.reset();
 
-    setSuccessMessage("Data added successfully!");
-
+    setSuccessMessage("Data updated successfully!");
+    handleSaveClick();
     setTimeout(() => {
       setSuccessMessage(null);
     }, 5000);

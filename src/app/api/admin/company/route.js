@@ -2,6 +2,7 @@ import connectDB from "@/lib/mongodb";
 import Company from "@/models/company";
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
+import { getServerSession } from "next-auth";
 export async function PUT(req) {
   const {
     _id,
@@ -24,11 +25,10 @@ export async function PUT(req) {
     companyWebsite,
 
     companyImage,
-    session,
   } = await req.json();
-
+  const session = await getServerSession({ req });
   try {
-    if (session != undefined) {
+    if (session) {
       await connectDB();
 
       await Company.findOneAndUpdate(

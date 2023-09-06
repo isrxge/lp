@@ -4,25 +4,57 @@ import { language } from "@/feature/changeLanguage/changeLanguageSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Data from "@/config/data.json";
 import DataEn from "@/config/dataEn.json";
+import Whitelist from "@/config/whitelist.json";
 const SeoMeta = dynamic(() => import("@/partials/SeoMeta"));
 import PageHeader from "@/partials/PageHeader";
 import { signIn } from "next-auth/react";
 import { userLogin } from "@/feature/login/loginSlice";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import { publicIp, publicIpv4, publicIpv6 } from "public-ip";
+import { loadipAddress } from "@/lib/loadData";
+// import { internalIpV4Sync } from "internal-ip";
 var bcrypt = require("bcryptjs");
-const Contact = () => {
+const Login = () => {
   const curlanguage = useSelector((rootState) => language(rootState));
   // let loginState = useSelector(loginStatus);
   const [errorMessage, setErrorMessage] = useState(false);
+  const [ip, setIp] = useState("");
   const router = useRouter();
+  const ipList: any = Whitelist.whitelist;
   const dispatch = useDispatch();
   const data = {
-    title: "DỊCH VỤ IT",
+    title: "Login",
     meta_title: "",
     description: "this is meta description",
     image: "",
   };
+  useEffect(() => {
+    const fetchIp = async () => {
+      if (ip == "") {
+        let ipAddress = await publicIpv4();
+
+        let ipAddressLocal = await loadipAddress();
+        let acceptList = ipList.filter(
+          (item) =>
+            item.publicIp == ipAddress && item.deviceIp == ipAddressLocal.ip,
+        );
+        console.log(ipAddressLocal);
+        if (acceptList.length == 0) {
+          // router.push("/404");
+        }
+
+        // fetch("https://api.ipify.org?format=json")
+        //   .then((response) => response.json())
+        //   .then((data) => console.log(data.ip));
+      } else {
+      }
+    };
+    // call the function
+    fetchIp()
+      // make sure to catch any error
+      .catch(console.error);
+  }, [ip]);
 
   async function onsubmit(e: any) {
     e.preventDefault();
@@ -157,4 +189,4 @@ const Contact = () => {
   );
 };
 
-export default Contact;
+export default Login;
