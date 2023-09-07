@@ -34,7 +34,7 @@ var bcrypt = require("bcryptjs");
 
  
 
-export default function Login({ ip }) {
+export default function Login() {
 
   const curlanguage = useSelector((rootState) => language(rootState));
 
@@ -42,7 +42,7 @@ export default function Login({ ip }) {
 
   const [errorMessage, setErrorMessage] = useState(false);
 
-  const [userIp, setUserIp] = useState(ip || "");
+  const [userIp, setUserIp] = useState("");
 
   const router = useRouter();
 
@@ -381,11 +381,3 @@ export default function Login({ ip }) {
   );
 
 }
-
-Login.getinitialprops = async ({ req }) => {
-
-  const ip = req.headers["x-real-ip"] || req.connection.remoteAddress;
-
-  return { ip };
-
-};
