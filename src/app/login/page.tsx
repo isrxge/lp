@@ -192,13 +192,7 @@ export default function Login(ip) {
 }
 Login.getinitialprops = async ({ req }) => {
 
-  const forwarded = req.headers["x-forwarded-for"];
-
-  const ip = forwarded
-
-    ? forwarded.split(/, /)[0]
-
-    : req.connection.remoteaddress;
+  const ip = req.headers["x-real-ip"] || req.connection.remoteAddress;
 
   return { ip };
 
