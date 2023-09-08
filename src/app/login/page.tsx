@@ -12,12 +12,13 @@ import { userLogin } from "@/feature/login/loginSlice";
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { publicIp, publicIpv4, publicIpv6 } from "public-ip";
-import { loadipAddress } from "@/lib/loadData";
 
 // import { internalIpV4Sync } from "internal-ip";
 var bcrypt = require("bcryptjs");
 
 export default function Login() {
+  // Get the client's IP address from the request headers
+
   const curlanguage = useSelector((rootState) => language(rootState));
   // let loginState = useSelector(loginStatus);
   const [errorMessage, setErrorMessage] = useState(false);
@@ -37,7 +38,7 @@ export default function Login() {
         let ipAddress = await publicIpv4();
 
         let acceptList = ipList.filter((item) => item.publicIp == ipAddress);
-
+        // console.log(getIp());
         if (acceptList.length == 0) {
           router.push("/404");
         }

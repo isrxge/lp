@@ -32,6 +32,7 @@ export default function ProductList() {
             image: 1,
             descriptionEn1: 1,
             description1: 1,
+            status: 1,
           },
           href,
         );
@@ -52,6 +53,7 @@ export default function ProductList() {
       {serviceList.map(
         (
           svc: {
+            status: string;
             type: any;
             descriptionEn1: any;
             titleEn: any;
@@ -63,7 +65,9 @@ export default function ProductList() {
           },
           i: any,
         ) => {
-          return (
+          return svc.status != "Active" ? (
+            <></>
+          ) : (
             <Grid.Col key={svc._id} md={6} lg={2}>
               <ServiceCard
                 src={svc.image}
