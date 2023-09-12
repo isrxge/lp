@@ -11,7 +11,7 @@ import { signIn } from "next-auth/react";
 import { userLogin } from "@/feature/login/loginSlice";
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import { publicIp, publicIpv4, publicIpv6 } from "public-ip";
+import { publicIpv4 } from "public-ip";
 
 // import { internalIpV4Sync } from "internal-ip";
 var bcrypt = require("bcryptjs");
@@ -37,7 +37,9 @@ export default function Login() {
       if (userIp == "") {
         let ipAddress = await publicIpv4();
 
-        let acceptList = ipList.filter((item) => item.publicIp == ipAddress);
+        let acceptList = ipList.filter(
+          (item) => item.publicIp == ipAddress && item.status == "Active",
+        );
         // console.log(getIp());
         if (acceptList.length == 0) {
           router.push("/404");

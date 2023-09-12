@@ -33,7 +33,10 @@ export async function createNews(newInfo, session) {
     },
     body: JSON.stringify(data),
   });
-
+  const returnResult = await res.json();
+  // By returning { props: { posts } }, the Blog component
+  // will receive `posts` as a prop at build time
+  return returnResult;
   // By returning { props: { posts } }, the Blog component
   // will receive `posts` as a prop at build time
 }
@@ -50,14 +53,33 @@ export async function addUsers(user, session) {
     },
     body: JSON.stringify(user),
   });
-  const userInfo = await res.json();
+  const returnResult = await res.json();
   // By returning { props: { posts } }, the Blog component
   // will receive `posts` as a prop at build time
-  return userInfo;
+  return returnResult;
   // By returning { props: { posts } }, the Blog component
   // will receive `posts` as a prop at build time
 }
+export async function addIp(ip, session) {
+  // Call an external API endpoint to get posts.
+  // You can use any data fetching library
+  // const posts = await loadNews()
 
+  const res = await fetch("api/admin/ip", {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+      "cache-control": "no-store",
+    },
+    body: JSON.stringify(ip),
+  });
+  const returnResult = await res.json();
+  // By returning { props: { posts } }, the Blog component
+  // will receive `posts` as a prop at build time
+  return returnResult;
+  // By returning { props: { posts } }, the Blog component
+  // will receive `posts` as a prop at build time
+}
 export async function addCustomer(customer, session) {
   // Call an external API endpoint to get posts.
   // You can use any data fetching library
@@ -73,7 +95,10 @@ export async function addCustomer(customer, session) {
     body: JSON.stringify(customer),
     session: session,
   });
-
+  const returnResult = await res.json();
+  // By returning { props: { posts } }, the Blog component
+  // will receive `posts` as a prop at build time
+  return returnResult;
   // By returning { props: { posts } }, the Blog component
   // will receive `posts` as a prop at build time
 }
@@ -91,7 +116,10 @@ export async function addPartner(partner, session) {
     },
     body: JSON.stringify(partner),
   });
-
+  const returnResult = await res.json();
+  // By returning { props: { posts } }, the Blog component
+  // will receive `posts` as a prop at build time
+  return returnResult;
   // By returning { props: { posts } }, the Blog component
   // will receive `posts` as a prop at build time
 }
@@ -132,7 +160,10 @@ export async function addProduct(product, session) {
     },
     body: JSON.stringify(data),
   });
-
+  const returnResult = await res.json();
+  // By returning { props: { posts } }, the Blog component
+  // will receive `posts` as a prop at build time
+  return returnResult;
   // By returning { props: { posts } }, the Blog component
   // will receive `posts` as a prop at build time
 }
@@ -167,7 +198,10 @@ export async function addProductContent(product, content, session) {
     },
     body: JSON.stringify(data),
   });
-
+  const returnResult = await res.json();
+  // By returning { props: { posts } }, the Blog component
+  // will receive `posts` as a prop at build time
+  return returnResult;
   // By returning { props: { posts } }, the Blog component
   // will receive `posts` as a prop at build time
 }
@@ -201,7 +235,10 @@ export async function addBanner(banner, session) {
 
     body: JSON.stringify(data),
   });
-
+  const returnResult = await res.json();
+  // By returning { props: { posts } }, the Blog component
+  // will receive `posts` as a prop at build time
+  return returnResult;
   // By returning { props: { posts } }, the Blog component
 
   // will receive `posts` as a prop at build time

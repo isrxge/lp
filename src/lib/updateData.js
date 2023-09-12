@@ -34,7 +34,10 @@ export async function updateNews(newInfo, session) {
     },
     body: JSON.stringify(data),
   });
-
+  const returnResult = await res.json();
+  // By returning { props: { posts } }, the Blog component
+  // will receive `posts` as a prop at build time
+  return returnResult;
   // By returning { props: { posts } }, the Blog component
   // will receive `posts` as a prop at build time
 }
@@ -51,6 +54,30 @@ export async function updateUsers(user, session) {
     },
     body: JSON.stringify(user),
   });
+  const returnResult = await res.json();
+  // By returning { props: { posts } }, the Blog component
+  // will receive `posts` as a prop at build time
+  return returnResult;
+  // By returning { props: { posts } }, the Blog component
+  // will receive `posts` as a prop at build time
+}
+export async function updateUsersPassword(user, session) {
+  // Call an external API endpoint to get posts.
+  // You can use any data fetching library
+  // const posts = await loadNews()
+
+  const res = await fetch("api/admin/user", {
+    method: "put",
+    headers: {
+      "Content-Type": "application/json",
+      "cache-control": "no-store",
+    },
+    body: JSON.stringify(user),
+  });
+  const returnResult = await res.json();
+  // By returning { props: { posts } }, the Blog component
+  // will receive `posts` as a prop at build time
+  return returnResult;
   // By returning { props: { posts } }, the Blog component
   // will receive `posts` as a prop at build time
 }
@@ -67,6 +94,10 @@ export async function updateCompanyInfo(company, session) {
     },
     body: JSON.stringify(company),
   });
+  const returnResult = await res.json();
+  // By returning { props: { posts } }, the Blog component
+  // will receive `posts` as a prop at build time
+  return returnResult;
   // By returning { props: { posts } }, the Blog component
   // will receive `posts` as a prop at build time
 }
@@ -83,6 +114,10 @@ export async function updateContactInfo(contact, session) {
     },
     body: JSON.stringify(contact),
   });
+  const returnResult = await res.json();
+  // By returning { props: { posts } }, the Blog component
+  // will receive `posts` as a prop at build time
+  return returnResult;
   // By returning { props: { posts } }, the Blog component
   // will receive `posts` as a prop at build time
 }
@@ -99,7 +134,10 @@ export async function updateCustomer(customer, session) {
     },
     body: JSON.stringify(customer),
   });
-
+  const returnResult = await res.json();
+  // By returning { props: { posts } }, the Blog component
+  // will receive `posts` as a prop at build time
+  return returnResult;
   // By returning { props: { posts } }, the Blog component
   // will receive `posts` as a prop at build time
 }
@@ -117,7 +155,10 @@ export async function updatePartner(partner, session) {
     body: JSON.stringify(partner),
     session: session,
   });
-
+  const returnResult = await res.json();
+  // By returning { props: { posts } }, the Blog component
+  // will receive `posts` as a prop at build time
+  return returnResult;
   // By returning { props: { posts } }, the Blog component
   // will receive `posts` as a prop at build time
 }
@@ -157,7 +198,10 @@ export async function updateProduct(product, session) {
     },
     body: JSON.stringify(data),
   });
-
+  const returnResult = await res.json();
+  // By returning { props: { posts } }, the Blog component
+  // will receive `posts` as a prop at build time
+  return returnResult;
   // By returning { props: { posts } }, the Blog component
   // will receive `posts` as a prop at build time
 }
@@ -192,7 +236,10 @@ export async function updateProductContent(product, content, session) {
     },
     body: JSON.stringify(data),
   });
-
+  const returnResult = await res.json();
+  // By returning { props: { posts } }, the Blog component
+  // will receive `posts` as a prop at build time
+  return returnResult;
   // By returning { props: { posts } }, the Blog component
   // will receive `posts` as a prop at build time
 }
@@ -209,7 +256,10 @@ export async function updateBanner(banner, session) {
     },
     body: JSON.stringify(banner),
   });
-
+  const returnResult = await res.json();
+  // By returning { props: { posts } }, the Blog component
+  // will receive `posts` as a prop at build time
+  return returnResult;
   // By returning { props: { posts } }, the Blog component
   // will receive `posts` as a prop at build time
 }

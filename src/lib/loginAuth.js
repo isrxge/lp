@@ -29,9 +29,6 @@ export const authOptions = {
             return null;
           }
 
-          // const passwordsMatch = await bcrypt.compare(password, user.password);
-          var salt = bcrypt.genSaltSync(10);
-
           if (!(password == returnData.password)) {
             return null;
           }

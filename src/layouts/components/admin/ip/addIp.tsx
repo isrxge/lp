@@ -6,29 +6,35 @@ import { useForm } from "@mantine/form";
 
 import { TextInput, Button, Box, Grid, Col } from "@mantine/core";
 
-import { addUsers } from "@/lib/createData";
+import { addIp } from "@/lib/createData";
 import { useSession } from "next-auth/react";
 import ToastGenerator from "@/lib/toast-tify";
 
-function UserForm() {
+function AddIp() {
   let { data: session, status } = useSession();
   const [successMessage, setSuccessMessage] = useState<string | null>(null); // Updated type declaration
   const [isSucess, setIsSucess] = useState(false);
   const [sucessMessage, setSucessMessage] = useState("");
   const form = useForm({
     initialValues: {
-      email: "",
+      ip: "",
     },
   });
 
   const onSubmitForm = async (values) => {
     // Continue with the rest of the form submission
 
-    let returnResult = await addUsers(values, session);
-    if (returnResult.success != undefined) {
-      showToast(returnResult.msg);
+    const ip = await addIp(values, session);
+    if (ip.success != undefined) {
+      showToast(ip.msg);
     }
     form.reset();
+
+    setSuccessMessage(ip.msg);
+
+    setTimeout(() => {
+      setSuccessMessage(null);
+    }, 10000);
   };
   const showToast = (msg) => {
     setIsSucess(true);
@@ -45,14 +51,14 @@ function UserForm() {
       {isSucess ? <ToastGenerator message={sucessMessage} /> : <></>}
       <Box maw={"75%"} mx="auto">
         <form onSubmit={form.onSubmit((values) => onSubmitForm(values))}>
-          <h3 className="flex justify-center">Add new user</h3>
+          <h3 className="flex justify-center">Add new ip</h3>
 
           <Grid gutter="lg">
             <Col span={12}>
               <TextInput
-                label="Name"
-                placeholder="Name"
-                {...form.getInputProps("email")}
+                label="ip"
+                placeholder="ip"
+                {...form.getInputProps("ip")}
               />
             </Col>
 
@@ -82,4 +88,4 @@ function UserForm() {
   );
 }
 
-export default UserForm;
+export default AddIp;
