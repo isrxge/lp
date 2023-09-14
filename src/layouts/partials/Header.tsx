@@ -77,13 +77,21 @@ const Header = () => {
   const { settings } = config;
 
   // get current path
-
+  const [width, setWidth]: any = useState(
+    typeof window !== "undefined" && window.innerWidth,
+  ); // default width, detect on server.
+  const handleResize = () =>
+    setWidth(typeof window !== "undefined" && window.innerWidth);
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [handleResize]);
   return isLoading ? (
     <></>
   ) : (
     <header
       className={`fixed top-0 w-full flex justify-center ${
-        scrolled
+        scrolled || width < 1030
           ? "border-b border-gray-200 bg-white/50 backdrop-blur-xl"
           : "bg-white/0"
       } z-30 transition-all`}
@@ -147,9 +155,11 @@ const Header = () => {
                     </svg>
                   </Link>
                   <div
-                    className={`nav-dropdown-list hidden group-hover:block gap-2 lg:invisible lg:absolute lg:block lg:opacity-0 lg:group-hover:visible lg:group-hover:opacity-100  grid-cols-${Math.round(
-                      menu.children.length / 4,
-                    )}`}
+                    className={`nav-dropdown-list hidden group-hover:block gap-2 lg:invisible lg:absolute lg:block lg:opacity-0 lg:group-hover:visible lg:group-hover:opacity-100${
+                      Math.round(menu.children.length / 4) > 1
+                        ? "grid-cols-3"
+                        : ""
+                    }`}
                   >
                     {menu.children?.map(
                       (
