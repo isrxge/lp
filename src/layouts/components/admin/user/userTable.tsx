@@ -7,6 +7,8 @@ import UpdateUser from "./updateUser";
 import { useSession } from "next-auth/react";
 import { updateCustomer } from "@/lib/updateData";
 import ToastGenerator from "@/lib/toast-tify";
+import Popup from "@/components/popup";
+import UserForm from "./createUser";
 
 interface Customer {
   status: string;
@@ -62,6 +64,9 @@ function UserTable() {
     let returnResult = await updateCustomer(userStatusChange, session);
     if (returnResult.success != undefined) {
       showToast(returnResult.msg);
+      const users = await loadUsers(href);
+
+      setUserData(users.users);
     }
   };
   const showToast = (msg) => {
@@ -72,6 +77,11 @@ function UserTable() {
       setSucessMessage("");
     }, 10000);
   };
+  const refreshUser = async () => {
+    const users = await loadUsers(href);
+
+    setUserData(users.users);
+  };
   const rows = userData.map((user, index) => (
     <tr key={user._id}>
       <td>{index + 1}</td>
@@ -80,9 +90,9 @@ function UserTable() {
 
       <td>{user.status}</td>
 
-      <td>
+      {/* <td>
         <button onClick={() => handleEditClick(user)}>Edit</button>
-      </td>
+      </td> */}
       <td>
         <button className="cursor-pointer" onClick={() => changeStatus(user)}>
           {user.status == "Active" ? "Disable" : "Active"}
@@ -94,6 +104,9 @@ function UserTable() {
   return (
     <div>
       {isSucess ? <ToastGenerator message={sucessMessage} /> : <></>}
+      <Popup>
+        <UserForm refreshUser={refreshUser} />
+      </Popup>
       <Table>
         <thead>
           <tr>
@@ -121,9 +134,7 @@ function UserTable() {
         {selectedUser && (
           <section className="section">
             <div className="container">
-              <h3 className="flex justify-center">
-                {isEditMode ? "Edit Product" : "Product Details"}
-              </h3>
+              <h3 className="flex justify-center">{isEditMode ? "" : ""}</h3>
 
               <UpdateUser
                 user={selectedUser}

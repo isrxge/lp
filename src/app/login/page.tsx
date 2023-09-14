@@ -7,7 +7,7 @@ import DataEn from "@/config/dataEn.json";
 import Whitelist from "@/config/whitelist.json";
 const SeoMeta = dynamic(() => import("@/partials/SeoMeta"));
 import PageHeader from "@/partials/PageHeader";
-import { signIn } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { publicIpv4 } from "public-ip";
@@ -15,7 +15,7 @@ var bcrypt = require("bcryptjs");
 
 export default function Login() {
   // Get the client's IP address from the request headers
-
+  const { data: session }: any = useSession();
   const curlanguage = useSelector((rootState) => language(rootState));
   // let loginState = useSelector(loginStatus);
   const [errorMessage, setErrorMessage] = useState(false);
@@ -29,6 +29,18 @@ export default function Login() {
     description: "this is meta description",
     image: "",
   };
+  // useEffect(() => {
+  //   const checkSession = async () => {
+  //     if (session != undefined) {
+  //       signOut({ callbackUrl: "http://lp.com.vn/login" });
+  //     } else {
+  //     }
+  //   };
+  //   // call the function
+  //   checkSession()
+  //     // make sure to catch any error
+  //     .catch(console.error);
+  // }, [session]);
   useEffect(() => {
     const fetchIp = async () => {
       if (userIp == "") {
@@ -49,14 +61,12 @@ export default function Login() {
       // make sure to catch any error
       .catch(console.error);
   }, [userIp]);
-
   async function onsubmit(e: any) {
     e.preventDefault();
-    var salt = bcrypt.genSaltSync(10);
-    var hash = bcrypt.hash(e.target.password.value, salt);
+
     const loginInfo: any = {
       email: e.target.email.value,
-      password: hash,
+      password: e.target.password.value,
       redirect: false,
     };
     try {
@@ -131,7 +141,6 @@ export default function Login() {
                     type="password"
                     name="password"
                     id="password"
-                    placeholder="••••••••"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     required={true}
                   />
