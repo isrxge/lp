@@ -59,7 +59,7 @@ function UpdateNew({ New, refreshNews }) {
 
         const data = await response.json();
 
-        value.image = data.secure_url;
+        updateData.image = data.secure_url;
       } catch (error) {
         console.error(error);
       }
@@ -161,7 +161,7 @@ function UpdateNew({ New, refreshNews }) {
                       borderRadius: "8px",
                     }}
                   >
-                    {selectedImage ? (
+                    {selectedImageURL ? (
                       <Image
                         src={selectedImageURL}
                         alt="Selected Image"

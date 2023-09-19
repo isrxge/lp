@@ -4,133 +4,86 @@ import React, { useState } from "react";
 
 import { useForm } from "@mantine/form";
 
-import Image from "next/image";
+import { TextInput, Button, Box, Grid, Col, Checkbox } from "@mantine/core";
 
-import { TextInput, Button, Box, Grid, Col } from "@mantine/core";
-
-import { addCustomer } from "@/lib/createData";
-
+import { addMenuItem } from "@/lib/createData";
 import { useSession } from "next-auth/react";
-
 import ToastGenerator from "@/lib/toast-tify";
 
-function CustomerForm({ refreshCustomer }) {
-  const [selectedImage, setSelectedImage] = useState(null);
-
+function AddItem({ refresh }) {
   let { data: session, status } = useSession();
-
   const [successMessage, setSuccessMessage] = useState<string | null>(null); // Updated type declaration
-
   const [isSucess, setIsSucess] = useState(false);
-
-  const [imagePreview, setImagePreview] = useState("");
-
   const [sucessMessage, setSucessMessage] = useState("");
-
   const form = useForm({
     initialValues: {
       name: "",
-
-      src: "",
+      nameEn: "",
+      link: "",
+      hasChildren: false,
     },
   });
 
-  const onImageChange = (e) => {
-    const file = e.target.files[0];
-
-    setSelectedImage(file);
-
-    const imageUrl = URL.createObjectURL(file);
-
-    setImagePreview(imageUrl);
-  };
-
   const onSubmitForm = async (values) => {
-    if (selectedImage) {
-      const formData = new FormData();
-
-      formData.append("file", selectedImage);
-
-      formData.append("upload_preset", "ml_default");
-
-      try {
-        const response = await fetch(
-          "https://api.cloudinary.com/v1_1/derjssgq9/image/upload",
-
-          {
-            method: "POST",
-
-            body: formData,
-          },
-        );
-
-        const data = await response.json();
-
-        values.src = data.secure_url; // Save the uploaded image URL to the form data
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
     // Continue with the rest of the form submission
 
-    let returnResult = await addCustomer(values, session);
-
-    if (returnResult.success != undefined) {
-      showToast(returnResult.msg);
-
-      refreshCustomer();
+    const item = await addMenuItem(values, session);
+    if (item.success != undefined) {
+      showToast(item.msg);
+      refresh();
     }
-
     form.reset();
-  };
 
-  const showToast = (msg) => {
-    setIsSucess(true);
-
-    setSucessMessage(msg);
+    setSuccessMessage(item.msg);
 
     setTimeout(() => {
+      setSuccessMessage(null);
+    }, 10000);
+  };
+  const showToast = (msg) => {
+    setIsSucess(true);
+    setSucessMessage(msg);
+    setTimeout(() => {
       setIsSucess(false);
-
       setSucessMessage("");
     }, 10000);
   };
-
   return (
     // <div style={{ maxHeight: "500px", overflowY: "auto" }}>
 
     <div className="container">
       {isSucess ? <ToastGenerator message={sucessMessage} /> : <></>}
-
-      <Box maw={"100%"} mx="auto">
+      <Box maw={"75%"} mx="auto">
         <form onSubmit={form.onSubmit((values) => onSubmitForm(values))}>
-          <h3 className="flex justify-center">Add new customer</h3>
-
-          {imagePreview && (
-            <div className="flex justify-center">
-              <Image
-                src={imagePreview}
-                alt="Preview"
-                width="350"
-                height="350"
-              />
-            </div>
-          )}
+          <h3 className="flex justify-center">Add new item</h3>
 
           <Grid gutter="lg">
-            <Col span={12}>
+            <Col span={6}>
               <TextInput
-                label="Name"
-                placeholder="Name"
+                label="name"
+                placeholder="name"
                 {...form.getInputProps("name")}
               />
             </Col>
-
             <Col span={6}>
-              <input type="file" accept="image/*" onChange={onImageChange} />
+              <TextInput
+                label="name"
+                placeholder="name"
+                {...form.getInputProps("nameEn")}
+              />
             </Col>
-
+            <Col span={6}>
+              <TextInput
+                label="link"
+                placeholder="link"
+                {...form.getInputProps("link")}
+              />
+            </Col>
+            <Checkbox
+              mt="md"
+              label="item has children?"
+              {...form.getInputProps("hasChildren", { type: "checkbox" })}
+            />
             <Col span={6} className="flex justify-end mt-6">
               {/* Thêm class CSS để đặt nút submit ở góc phải */}
 
@@ -157,4 +110,4 @@ function CustomerForm({ refreshCustomer }) {
   );
 }
 
-export default CustomerForm;
+export default AddItem;

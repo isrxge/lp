@@ -33,9 +33,11 @@ function AddNews({ refreshNews }) {
     initialValues: {
       key: randomId(),
 
-      title: "",
+      title: (value) =>
+        value.length > 60 ? "Title cannot exceed 60 characters" : null,
 
-      titleEn: "",
+      titleEn: (value) =>
+        value.length > 60 ? "Title cannot exceed 60 characters" : null,
 
       meta_title: "",
 
@@ -72,9 +74,11 @@ function AddNews({ refreshNews }) {
   // Sử dụng useEffect để tự động cập nhật giá trị cho trường "Date" thành ngày hiện tại trước khi bạn gửi biểu mẫu
 
   const onHandleChange = (e: any) => {
-    setContent(e.data);
-
-    setContentEn(e.data);
+    if (e.language == "vn") {
+      setContent(e.data);
+    } else {
+      setContentEn(e.data);
+    }
 
     // form.insertListItem(`content.${e.idcontent}.description.${e.id}`, e);
   };
@@ -114,10 +118,6 @@ function AddNews({ refreshNews }) {
 
     values.contentEn = contentEn;
 
-    setContent("");
-
-    setContentEn("");
-
     let returnResult = await createNews(values, session);
     if (returnResult.success != undefined) {
       showToast(returnResult.msg);
@@ -145,6 +145,7 @@ function AddNews({ refreshNews }) {
                   label="Title"
                   placeholder="Title"
                   {...form.getInputProps("title")}
+                  maxLength={60}
                 />
               </Col>
 
@@ -152,6 +153,7 @@ function AddNews({ refreshNews }) {
                 <TextInput
                   label="Title (English)"
                   placeholder="Title (English)"
+                  maxLength={60}
                   {...form.getInputProps("titleEn")}
                 />
               </Col>

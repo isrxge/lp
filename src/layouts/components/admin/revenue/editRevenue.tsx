@@ -3,44 +3,32 @@
 import React, { useState } from "react";
 
 import { useForm } from "@mantine/form";
-
-import { TextInput, Button, Box, Grid, Col } from "@mantine/core";
-
 import Image from "next/image";
-
-import { updatePartner } from "@/lib/updateData";
+import { Button, Box, Grid, Col } from "@mantine/core";
 
 import { useSession } from "next-auth/react";
-
 import ToastGenerator from "@/lib/toast-tify";
+import { UpdateRevenue } from "@/lib/updateData";
 
-function UpdatePartner({ partner, handleSaveClick }) {
-  const [selectedImage, setSelectedImage] = useState(null);
-
-  const [selectedImageURL, setSelectedImageURL] = useState(partner.src);
-
+function EditRevenue({ Revenue, language, refreshRevenue }) {
   let { data: session, status } = useSession();
-
   const [successMessage, setSuccessMessage] = useState<string | null>(null); // Updated type declaration
-
   const [isSucess, setIsSucess] = useState(false);
-
   const [sucessMessage, setSucessMessage] = useState("");
-
-  const form = useForm({
-    initialValues: JSON.parse(JSON.stringify(partner)),
-  });
-
+  const [imagePreview, setImagePreview] = useState(Revenue.description);
+  const [selectedImage, setSelectedImage] = useState(null);
   const onImageChange = (e) => {
     const file = e.target.files[0];
 
+    const imageUrl = URL.createObjectURL(file);
     setSelectedImage(file);
-
-    setSelectedImageURL(URL.createObjectURL(file));
+    setImagePreview(imageUrl);
   };
-
   const onSubmitForm = async (values) => {
-    if (selectedImage && selectedImageURL != partner.src) {
+    // Continue with the rest of the form submission
+    if (selectedImage && imagePreview != Revenue) {
+      // Nếu có hình ảnh được chọn, tải lên trước
+
       const formData = new FormData();
 
       formData.append("file", selectedImage);
@@ -60,65 +48,60 @@ function UpdatePartner({ partner, handleSaveClick }) {
 
         const data = await response.json();
 
-        values.src = data.secure_url; // Save the uploaded image URL to the form data
+        values.image = data.secure_url; // Lưu URL hình ảnh đã tải lên vào dữ liệu biểu mẫu
       } catch (error) {
         console.error(error);
       }
     }
-
-    // Continue with the rest of the form submission
-
-    let returnResult = await updatePartner(values, session);
-
-    if (returnResult.success != undefined) {
-      showToast(returnResult.msg);
-
-      handleSaveClick();
+    const newRevenue = await UpdateRevenue(values, session);
+    if (newRevenue.success != undefined) {
+      showToast(newRevenue.msg);
+      refreshRevenue();
     }
-  };
 
-  const showToast = (msg) => {
-    setIsSucess(true);
-
-    setSucessMessage(msg);
+    setSuccessMessage(newRevenue.msg);
 
     setTimeout(() => {
+      setSuccessMessage(null);
+    }, 10000);
+  };
+  const showToast = (msg) => {
+    setIsSucess(true);
+    setSucessMessage(msg);
+    setTimeout(() => {
       setIsSucess(false);
-
       setSucessMessage("");
     }, 10000);
   };
-
+  const form = useForm({
+    initialValues: {
+      image: "",
+      language: language,
+    },
+  });
   return (
     // <div style={{ maxHeight: "500px", overflowY: "auto" }}>
 
     <div className="container">
-      {isSucess ? <ToastGenerator message={sucessMessage} /> : null}
-
-      <Box maw={"100%"} mx="auto">
+      {isSucess ? <ToastGenerator message={sucessMessage} /> : <></>}
+      <Box maw={"75%"} mx="auto">
         <form onSubmit={form.onSubmit((values) => onSubmitForm(values))}>
-          <h3 className="flex justify-center">Update partner</h3>
+          <h3 className="flex justify-center">Edit revenue</h3>
 
           <Grid gutter="lg">
-            <Col span={12}>
-              <TextInput
-                label="Name"
-                placeholder="Name"
-                {...form.getInputProps("name")}
-              />
-            </Col>
-
+            {imagePreview && (
+              <div className="flex justify-center">
+                <Image
+                  src={imagePreview}
+                  alt="Preview"
+                  width="350"
+                  height="350"
+                />
+              </div>
+            )}
             <Col span={6}>
               <input type="file" accept="image/*" onChange={onImageChange} />
-
-              <Image
-                src={selectedImageURL}
-                alt="Selected Image"
-                width={300}
-                height={300}
-              />
             </Col>
-
             <Col span={6} className="flex justify-end mt-6">
               {/* Thêm class CSS để đặt nút submit ở góc phải */}
 
@@ -145,4 +128,4 @@ function UpdatePartner({ partner, handleSaveClick }) {
   );
 }
 
-export default UpdatePartner;
+export default EditRevenue;

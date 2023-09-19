@@ -23,8 +23,8 @@ const Posts = () => {
   const [showList, setShowList] = useState([]);
   const onpageChange = (page) => {
     setPage(page);
-    const startIndex = (page - 1) * 6;
-    setShowList(newList.slice(startIndex, startIndex + 6));
+    const startIndex = (page - 1) * 4;
+    setShowList(newList.slice(startIndex, startIndex + 4));
   };
 
   useEffect(() => {
@@ -45,9 +45,9 @@ const Posts = () => {
           },
           href,
         );
-        setNewList(newsCheck.news);
-        const startIndex = (activePage - 1) * 6;
-        setShowList(newsCheck.news.slice(startIndex, startIndex + 6));
+        setNewList(newsCheck.news.reverse());
+        const startIndex = (activePage - 1) * 4;
+        setShowList(newsCheck.news.slice(startIndex, startIndex + 4));
       } else {
       }
     };
@@ -64,7 +64,10 @@ const Posts = () => {
     image: "",
   };
   const categories = ["Events", "Security"];
-
+  const getDate = (createDate) => {
+    let date = new Date(createDate);
+    return date.getTime();
+  };
   return newList.length == 0 ? (
     <section className="section pt-7">
       <div className="container">
@@ -122,16 +125,21 @@ const Posts = () => {
                   </div>
                 ))}
               </div>
-              {showList.length > 6 ? (
-                <Pagination
-                  value={activePage}
-                  onChange={(page) => onpageChange(page)}
-                  total={showList.length / 6}
-                  withEdges
-                />
-              ) : (
-                <></>
-              )}
+              <div className="flex items-center justify-center ">
+                <div className=" w-fit ">
+                  {newList.length > 4 ? (
+                    <Pagination
+                      align="content-center"
+                      value={activePage}
+                      onChange={(page) => onpageChange(page)}
+                      total={Math.ceil(newList.length / 4)}
+                      withEdges
+                    />
+                  ) : (
+                    <></>
+                  )}
+                </div>
+              </div>
             </div>
 
             <PostSidebar categories={categories} allCategories={showList} />

@@ -10,6 +10,7 @@ import { loadCompanyInfo } from "@/lib/loadData";
 import PartnerListForAbout from "./partnerListForAbout";
 import CustomerListForAbout from "./customerListForAbout";
 import { useUrl } from "nextjs-current-url";
+import Chart from "../../layouts/components/chart";
 export default function CompanyInfo() {
   const { href } = useUrl() ?? {};
   const curlanguage = useSelector((rootState) => language(rootState));
@@ -241,14 +242,13 @@ export default function CompanyInfo() {
           </div>
         </div>
 
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <Image
-            src="https://res.cloudinary.com/derjssgq9/image/upload/v1693284851/lpc_revenue_lcetzq.webp"
-            width={1200}
-            height={700}
-            alt="LPC team"
-            objectFit="cover"
-          />
+        <div className="mx-auto max-w-7xl px-6 lg:px-8 text-center">
+          <h3>
+            {curlanguage.changeLanguage.value == "en"
+              ? "LPC REVENUE"
+              : "DOANH THU LPC"}
+          </h3>
+          <Chart />
         </div>
       </div>
     </section>
