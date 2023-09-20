@@ -204,12 +204,18 @@ export async function updateProduct(product, session) {
 
     image: product.image,
 
-    pros: product.pros,
+    pros:
+      typeof product.pros == "string"
+        ? product.pros.split(/\s*,\s*/)
+        : product.pros,
 
-    prosEn: product.prosEn,
+    prosEn:
+      typeof product.prosEn == "string"
+        ? product.prosEn.split(/\s*,\s*/)
+        : product.prosEn,
     status: product.status,
   };
-
+  console.log(typeof product.pros);
   const res = await fetch("api/admin/product", {
     method: "put",
     headers: {
